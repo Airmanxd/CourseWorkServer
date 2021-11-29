@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link th:href="@{/css/styles.css}" th:rel="stylesheet" />
+</head>
+<body>
+<nav th:insert="fragments.html :: navbar"></nav>
+
+<form role="form" th:action="@{/admin/addProduct}" th:method="post" th:object="${video}">
+    <lable>Name</lable>
+    <input type="text" id="name" name="name" placeholder="Name" th:field="*{name}">
+
+    <lable>Price</lable>
+    <input type="number" id="price" name="price" placeholder="price" th:field="*{price}">
+
+    <lable>Path to image</lable>
+    <input type="text" id="imagePath" name="imagePath" placeholder="imagePath" th:field="*{imagePath}">
+
+    <label>Category</label>
+    <select th:field="*{category}">
+        <option th:value="MedGlasses" th:text="MedGlasses"></option>
+        <option th:value="Lenses" th:text="Lenses"></option>
+        <option th:value="SunGlasses" th:text="SunGlasses"></option>
+    </select>
+
+    <input type="submit">
+</form>
+<p th:if="${success}">Successfully added a video</p>
+<script th:src="@{https://code.jquery.com/jquery-3.5.1.slim.min.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/scripts.js}"></script>
+
+</body>
+</html>

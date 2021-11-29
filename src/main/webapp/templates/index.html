@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body class="bg-dark text-white">
+    <H1>Welcome to my optics store!</H1>
+    <a th:href="@{~/registration}"><b>Registration</b></a>
+    <a th:href="@{~/videos}">Our Products</a>
+    <a th:href="@{~/login}">Login</a>
+    <p sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{~/admin/deleteUser}"><b>Delete Users</b></a>
+        <a th:href="@{~/admin/addProduct}">Add videos</a>
+    </p>
+</body>
+</html>
