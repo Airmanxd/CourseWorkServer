@@ -24,6 +24,12 @@ public class UserController {
     @Autowired
     private VideoService videoService;
 
+    /**
+     * GET handler for user video deletion
+     * @param id
+     * @param principal
+     * @return
+     */
     @GetMapping("/deleteVideo/{id}")
     public String deleteVideo(@PathVariable("id") Long id, Principal principal)
     {

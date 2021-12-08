@@ -24,6 +24,10 @@ public class CustomAuthentication implements AuthenticationProvider {
     private UserService userService;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+    /**
+     * custom authentication method
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();

@@ -40,6 +40,13 @@ public class VideosController {
         this.handler = handler;
     }
 
+    /**
+     * GET handler for the first access to the videos page
+     * @param model
+     * @param principal
+     * @return videos page with all the videos
+     * @throws IOException
+     */
     @GetMapping()
     public String initial(Model model, Principal principal) throws IOException
     {
@@ -51,6 +58,13 @@ public class VideosController {
         return "videos";
     }
 
+    /**
+     * POST handler for categorization of videos on the videos page
+     * @param model
+     * @param category
+     * @param principal
+     * @return videos page with categorized videos only
+     */
     @PostMapping("/categorized")
     public String categorized(Model model, @ModelAttribute("category") String category, Principal principal){
 
@@ -59,29 +73,36 @@ public class VideosController {
             model.addAttribute("videos", user.getLikedVideos());
             return "videos";
         }
-
-        List<Video> videos = videoService.getAll();
-        videos.sort(Comparator.comparing(Video::getName));
-        if(!category.equals("All")){
-            List<Video> result = new ArrayList<>();
-            for(Video video : videos){
-                if(video.getCategory().equals(category))
-                    result.add(video);
-            }
-            model.addAttribute("videos", result);
-        }
+        if(category.equals("All"))
+            model.addAttribute("videos", videoService.getAll());
         else
-            model.addAttribute("videos", videos);
-        Boolean categorized = true;
+            model.addAttribute("videos", videoService.getByCategory(category));
+                Boolean categorized = true;
         model.addAttribute("categorized",categorized);
         return "videos";
     }
+
+    /**
+     * GET handler for upload request
+     * @param model
+     * @return upload page
+     * @throws IOException
+     */
     @GetMapping("/upload")
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("video", new Video());
         return "upload";
     }
 
+    /**
+     * POST handler for video uploads
+     * @param file MultipartFile from the request
+     * @param redirectAttributes
+     * @param video Video object from the client form
+     * @param principal
+     * @return redirects to user channel
+     * @throws IOException
+     */
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Video video, Principal principal) throws IOException{
         User user = (User) userService.loadUserByUsername(principal.getName());
@@ -91,6 +112,11 @@ public class VideosController {
         return "redirect:/channel";
     }
 
+    /**
+     * GET handler for admin video deletetion requests
+     * @param id videoId from request
+     * @return redirects to the videos page
+     */
     @GetMapping("/deleteVideo/{id}")
     public String deleteVideo(@PathVariable("id") Long id)
     {
@@ -103,13 +129,12 @@ public class VideosController {
         return ResponseEntity.notFound().build();
     }
 
-//    @GetMapping("/{path}")
-//    public void getFile(HttpServletRequest request, HttpServletResponse response, @PathVariable("path") String path) throws ServletException, IOException {
-//
-//        request.setAttribute(MyResourceHttpRequestHandler.ATTR_FILE, path);
-//        handler.handleRequest(request, response);
-//    }
 
+    /**
+     * GET handler for video load requests
+     * @param id videoId from the request
+     * @return FileSystemResource of the videofile requested
+     */
     @GetMapping(path = "/{id}", produces = "video/mp4")
     @ResponseBody
     public FileSystemResource plain( @PathVariable("id") Long id) {
@@ -117,6 +142,13 @@ public class VideosController {
         return new FileSystemResource(video.getSourcePath());
 
     }
+
+    /**
+     * GET handler for like requests
+     * @param id videoId from request
+     * @param principal
+     * @return redirects to the videos page
+     */
     @GetMapping("/like/{id}")
     public String like(@PathVariable("id") Long id, Principal principal){
         User user = (User) userService.loadUserByUsername(principal.getName());

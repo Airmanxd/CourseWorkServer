@@ -18,11 +18,21 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    /**
+     * GET handler for admin access to the user deletion page
+     * @return user delete page
+     */
     @GetMapping("/deleteUser")
     public String deleteUser()
     {
         return "admin/deleteUser";
     }
+
+    /**
+     * POST handler for user deletion by an admin
+     * @param username
+     * @return shows if the user was deleted successfully
+     */
     @PostMapping("/deleteUser")
     public @ResponseBody String deleteUser(@RequestParam("username") String username)
     {

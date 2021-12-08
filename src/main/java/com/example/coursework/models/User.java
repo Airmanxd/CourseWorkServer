@@ -66,6 +66,10 @@ public class User implements UserDetails {
         return likedVideos;
     }
 
+    /**
+     * returns authority of the user for security checks
+     * @return
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

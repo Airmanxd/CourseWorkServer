@@ -34,21 +34,44 @@ public class HomeController {
         return "login";
     }
 
+    /**
+     * Login POST handler
+     */
     @PostMapping("login")
     public String login(){ return "redirect:/videos";}
 
+    /**
+     * GET handler for the access to registration page
+     * @param model
+     * @return registration page
+     */
     @GetMapping("registration")
     public String signUp(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("registered", "");
         return "registration";
     }
 
+    /**
+     * POST handler for user registration
+     * @param user
+     * @return redirects to the videos page
+     */
     @PostMapping("registration")
-    public String reg(User user) {
-        userService.register(user);
-        return "redirect:/videos";
+    public String reg(User user, Model model) {
+        if(userService.register(user))
+            return "redirect:/videos";
+        else
+            model.addAttribute("registered", "User with this name already exists");
+        return"registration";
     }
 
+    /**
+     * Log out method
+     * @param request
+     * @param response
+     * @return redirects to the videos page
+     */
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
@@ -57,6 +80,12 @@ public class HomeController {
         return "redirect:/videos";
     }
 
+    /**
+     * GET handler for channel request
+     * @param model
+     * @param principal
+     * @return user's channel page
+     */
     @GetMapping("/channel")
     public String show(Model model, Principal principal)
     {

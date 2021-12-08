@@ -29,15 +29,20 @@ public class VideoService {
     @Autowired
     private StorageProperties storageProperties;
 
+    /**
+     * adds Video to DB and saves the associated videofile in the storage directory
+     * @param video Video to add to DB
+     * @param file Videofile to store
+     * @param user User object of the client trying to add the video
+     * @return true if succeeded in adding, false if video with this name already exists
+     * @throws IOException
+     */
     public boolean addVideo(Video video, MultipartFile file, User user) throws IOException {
         log.info(String.format("Trying to add a video %s", video.getName()));
         if(videoRepository.findByName(video.getName()) != null)
             return false;
         storageService.store(file);
-        String path = Paths.get(storageProperties.getLocation()).resolve(
-                Paths.get(file.getOriginalFilename()))
-                .normalize().toAbsolutePath().toString();
-        log.info(String.format("Video sourcepath: %s", "src/main/java/webapp/templates/videos/"+file.getOriginalFilename()));
+        log.info(String.format("Video sourcepath: %s", "src/main/webapp/templates/videos/"+file.getOriginalFilename()));
 
         video.setOwner(user);
         user.add_to_channel(video);
@@ -45,20 +50,41 @@ public class VideoService {
         videoRepository.save(video);
         return true;
     }
+
+    /**
+     * @return all videos in the DB
+     */
     public List<Video> getAll()
     {
         return videoRepository.findAll();
     }
 
+    /**
+     * @param category
+     * @return List of Video objects of specified category
+     */
     public List<Video> getByCategory(String category)
     {
         return videoRepository.findByCategory(category);
     }
 
+    /**
+     * @param name name of the video
+     * @return Video object of specified name
+     */
     public Video getByName(String name){ return videoRepository.findByName(name);}
 
+    /**
+     * @param id videoId
+     * @return Video object of specified id
+     */
     public Video getById(Long id){ return videoRepository.findByVideoId(id);}
 
+    /**
+     * deletes the specified Video from the db, associated with it videofile from the storage directory
+     * and removes this video from the liked of users who had previously liked it
+     * @param id videoId
+     */
     public boolean deleteVideo(Long id) {
         Video video = videoRepository.findByVideoId(id);
         if(video == null)
@@ -76,6 +102,12 @@ public class VideoService {
         return true;
     }
 
+    /**
+     * Adds a like to a video if the user hasn't liked the video yet, otherwise removes it
+     * Also adds or removes the video from the users liked videos
+     * @param id videoId to like or unlike
+     * @param user User object of the client trying to like the video
+     */
     public void like(Long id, User user){
         Video video = videoRepository.findByVideoId(id);
         List<Video> liked = user.getLikedVideos();

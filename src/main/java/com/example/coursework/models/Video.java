@@ -24,6 +24,9 @@ public class Video {
     @JsonIgnore
     private String sourcePath;
 
+    /**
+     * @param sourcePath path to the videofile associated with this Video object
+     */
     public void setSourcePath(String sourcePath) {
         this.sourcePath = sourcePath;
     }
@@ -51,5 +54,4 @@ public class Video {
     public String getName() {
         return name;
     }
-
 }

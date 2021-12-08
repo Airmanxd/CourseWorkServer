@@ -22,6 +22,9 @@ public class Config implements WebMvcConfigurer {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * custom TemplateResolver
+     */
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -31,6 +34,9 @@ public class Config implements WebMvcConfigurer {
         return templateResolver;
     }
 
+    /**
+     * Custom TemplateEngine
+     */
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -41,6 +47,9 @@ public class Config implements WebMvcConfigurer {
         return templateEngine;
     }
 
+    /**
+     * Thymeleaf ViewResolver initialization
+     */
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();

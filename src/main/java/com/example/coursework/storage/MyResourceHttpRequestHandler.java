@@ -13,6 +13,12 @@ public class MyResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
     public static String ATTR_FILE = MyResourceHttpRequestHandler.class.getName() + ".file";
 
+    /**
+     * returns file as Resource
+     * @param request client request for the file
+     * @return returns file as Resource
+     * @throws IOException
+     */
     @Override
     public Resource getResource(HttpServletRequest request) throws IOException {
 

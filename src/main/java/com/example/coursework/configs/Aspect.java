@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 @org.aspectj.lang.annotation.Aspect
 public class Aspect {
+    /**
+     * adds time logging to all service methods
+     */
     @Around("allServiceMethods()")
     public Object logAroundTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();

@@ -11,6 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.example.coursework")
 public class VideohostingApplication {
 
+	/**
+	 * Starts the application
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(VideohostingApplication.class, args);
 	}

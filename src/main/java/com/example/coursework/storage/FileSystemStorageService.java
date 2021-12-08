@@ -27,14 +27,24 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class FileSystemStorageService implements StorageService {
 
+	/**
+	 * path to the files folder
+	 */
 	private final Path rootLocation;
 
 
+	/**
+	 * @param properties storage config
+	 */
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
 		this.rootLocation = Paths.get(properties.getLocation());
 	}
 
+	/**
+	 * Saves the file in a directory specified in the storage config
+	 * @param file file to save
+	 */
 	@Override
 	public void store(MultipartFile file) {
 		try {
@@ -58,6 +68,10 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * loads all the videos in the storage folder
+	 * @return loads all the videos in the storage folder
+	 */
 	@Override
 	public Stream<Path> loadAll() {
 		try {
@@ -68,14 +82,23 @@ public class FileSystemStorageService implements StorageService {
 		catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
 		}
-
 	}
 
+	/**
+	 * returns the path to the specified file
+	 * @param filename name of the file
+	 * @return returns the path to the specified file
+	 */
 	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
 	}
 
+	/**
+	 * returns specified file as Resource
+	 * @param filename name of the file
+	 * @return returns specified file as Resource
+	 */
 	@Override
 	public Resource loadAsResource(String filename) {
 		try {
@@ -94,11 +117,18 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * deletes all files
+	 */
 	@Override
 	public void deleteAll() {
 		FileSystemUtils.deleteRecursively(rootLocation.toFile());
 	}
 
+	/**
+	 * deletes the specified file
+	 * @param name name of the video
+	 */
 	@Override
 	public void deleteByName(String name) {
 		log.info("Trying to delete the file: " + name);
@@ -114,6 +144,9 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 
+	/**
+	 * initialization
+	 */
 	@Override
 	public void init() {
 		try {
