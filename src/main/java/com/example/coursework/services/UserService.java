@@ -1,12 +1,10 @@
 package com.example.coursework.services;
 
-import com.example.coursework.models.Video;
 import com.example.coursework.models.User;
 import com.example.coursework.repositories.VideoRepository;
 import com.example.coursework.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

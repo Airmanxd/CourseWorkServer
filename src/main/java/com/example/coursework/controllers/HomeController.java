@@ -89,7 +89,7 @@ public class HomeController {
     @GetMapping("/channel")
     public String show(Model model, Principal principal)
     {
-        User user = (User) userService.loadUserByUsername(principal.getName());
+        User user = userService.loadUserByUsername(principal.getName());
 
         List<Video> videos = user.getChannel();
         videos.sort(Comparator.comparing(Video::getName));

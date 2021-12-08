@@ -1,7 +1,6 @@
 package com.example.coursework.controllers;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,10 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.coursework.storage.StorageFileNotFoundException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/videos")
@@ -68,8 +63,8 @@ public class VideosController {
     @PostMapping("/categorized")
     public String categorized(Model model, @ModelAttribute("category") String category, Principal principal){
 
-        if (category == "Liked"){
-            User user = (User) userService.loadUserByUsername(principal.getName());
+        if (category.equals("Liked")){
+            User user = userService.loadUserByUsername(principal.getName());
             model.addAttribute("videos", user.getLikedVideos());
             return "videos";
         }
@@ -105,7 +100,7 @@ public class VideosController {
      */
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes, Video video, Principal principal) throws IOException{
-        User user = (User) userService.loadUserByUsername(principal.getName());
+        User user = userService.loadUserByUsername(principal.getName());
         videoService.addVideo(video, file, user);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
@@ -151,7 +146,7 @@ public class VideosController {
      */
     @GetMapping("/like/{id}")
     public String like(@PathVariable("id") Long id, Principal principal){
-        User user = (User) userService.loadUserByUsername(principal.getName());
+        User user = userService.loadUserByUsername(principal.getName());
         Video video = videoService.getById(id);
         videoService.like(id, user);
         return "redirect:/videos";
